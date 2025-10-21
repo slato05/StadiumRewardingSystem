@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itccloud.mapper.PreferenceMapper">
+
+    <insert id="insertFan" useGeneratedKeys="true" keyProperty="fanId">
+        INSERT INTO StadiumRewardSystem.Fan
+            (first_name, last_name, email, phone_number, occupation)
+        VALUES
+            (#{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{occupation})
+    </insert>
+
+    <insert id="insertPreference">
+        INSERT INTO StadiumRewardSystem.Preference
+            (fan_id, stand_id, reservation_time)
+        VALUES
+            (#{fanId}, #{standId}, #{reservationTime})
+    </insert>
+
+    <select id="findDuplicateFan" resultType="int">
+        SELECT COUNT(*) FROM StadiumRewardSystem.Fan
+        WHERE LOWER(first_name) = LOWER(#{firstName})
+          AND LOWER(last_name) = LOWER(#{lastName})
+    </select>
+
+    <delete id="clearPreferences">
+        DELETE FROM StadiumRewardSystem.Preference;
+        DELETE FROM StadiumRewardSystem.Fan;
+    </delete>
+
+</mapper>

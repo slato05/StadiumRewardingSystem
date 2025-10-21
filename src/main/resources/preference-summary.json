@@ -1,0 +1,32 @@
+{
+  "stands": [
+    {
+      "standId": "EAST",
+      "standName": "East Stand",
+      "availableSeats": 3,
+      "numberOfPreferredSeats": 2,
+      "discountPrice": 10.00
+    },
+    {
+      "standId": "WEST",
+      "standName": "West Stand",
+      "availableSeats": 3,
+      "numberOfPreferredSeats": 1,
+      "discountPrice": 5.00
+    },
+    {
+      "standId": "SOUTH",
+      "standName": "South Stand",
+      "availableSeats": 5,
+      "numberOfPreferredSeats": 4,
+      "discountPrice": 2.00
+    },
+    {
+      "standId": "NORTH",
+      "standName": "North Stand",
+      "availableSeats": 5,
+      "numberOfPreferredSeats": 3,
+      "discountPrice": 2.00
+    }
+  ]
+}
