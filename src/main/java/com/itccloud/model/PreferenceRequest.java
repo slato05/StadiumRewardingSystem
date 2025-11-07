@@ -8,9 +8,7 @@ public class PreferenceRequest {
     private String standId;
     private String reservationTime;
 
-    public Fan getFan() {
-        return fan;
-    }
+    public Fan getFan() { return fan; }
 
     public void setFan(Fan fan) {
         this.fan = fan;

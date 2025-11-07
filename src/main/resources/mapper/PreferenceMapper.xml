@@ -5,6 +5,13 @@
 
 <mapper namespace="com.itccloud.mapper.PreferenceMapper">
 
+    <select id="countPreferencesByStand" resultType="int">
+        SELECT COUNT(*)
+        FROM StadiumRewardSystem.preference
+        WHERE stand_id = #{standId}
+    </select>
+
+
     <insert id="insertFan" useGeneratedKeys="true" keyProperty="fanId">
         INSERT INTO StadiumRewardSystem.Fan
             (first_name, last_name, email, phone_number, occupation)
@@ -23,6 +30,21 @@
         SELECT COUNT(*) FROM StadiumRewardSystem.Fan
         WHERE LOWER(first_name) = LOWER(#{firstName})
           AND LOWER(last_name) = LOWER(#{lastName})
+    </select>
+
+    <select id="findAllPreferences" resultType="com.itccloud.model.PreferenceEntry">
+        SELECT
+            f.fan_id AS fanId,
+            f.first_name AS firstName,
+            f.last_name AS lastName,
+            f.email AS email,
+            f.phone_number AS phoneNumber,
+            f.occupation AS occupation,
+            p.stand_id AS standId,
+            p.reservation_time AS reservationTime
+        FROM StadiumRewardSystem.Fan f
+                 JOIN StadiumRewardSystem.Preference p ON f.fan_id = p.fan_id
+        ORDER BY p.reservation_time;
     </select>
 
     <delete id="clearPreferences">

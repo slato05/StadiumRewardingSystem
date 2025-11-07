@@ -1,19 +1,22 @@
 package com.itccloud.model;
 
-import lombok.Data;
+import java.sql.Timestamp;
 
-@Data
-public class Fan {
-    private Integer fanId;
+public class PreferenceEntry {
+    private int fanId;
     private String firstName;
     private String lastName;
     private String email;
     private String phoneNumber;
     private String occupation;
+    private String standId;
+    private Timestamp reservationTime;
 
-    public Integer getFanId() { return fanId; }
+    public int getFanId() {
+        return fanId;
+    }
 
-    public void setFanId(Integer fanId) {
+    public void setFanId(int fanId) {
         this.fanId = fanId;
     }
 
@@ -55,5 +58,21 @@ public class Fan {
 
     public void setOccupation(String occupation) {
         this.occupation = occupation;
+    }
+
+    public String getStandId() {
+        return standId;
+    }
+
+    public void setStandId(String standId) {
+        this.standId = standId;
+    }
+
+    public Timestamp getReservationTime() {
+        return reservationTime;
+    }
+
+    public void setReservationTime(Timestamp reservationTime) {
+        this.reservationTime = reservationTime;
     }
 }

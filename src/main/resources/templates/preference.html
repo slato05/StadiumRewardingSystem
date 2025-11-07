@@ -12,7 +12,7 @@
     <h3 class="text-center mb-4 fw-bold text-primary">Preference Summary</h3>
 
     <div class="table-responsive mb-5">
-        <table class="table table-striped table-bordered table-hover text-center align-middle">
+        <table id="summaryTable" class="table table-striped table-bordered table-hover text-center align-middle">
             <thead class="table-dark">
             <tr>
                 <th>Stand</th>
@@ -27,8 +27,8 @@
                 <td th:text="${s.standName}"></td>
                 <td th:text="${s.availableSeats}"></td>
                 <td th:text="${s.numberOfPreferredSeats}"></td>
-                <td th:text="${s.discountPrice}"></td>
-                <td th:text="${s.estimatedTotalEarnings}"></td>
+                <td th:text="'$' + ${s.discountPrice}"></td>
+                <td th:text="'$' + ${s.estimatedTotalEarnings}"></td>
             </tr>
             </tbody>
         </table>
@@ -90,7 +90,8 @@
             <button type="button" id="addBtn" class="btn btn-outline-success me-2">Add</button>
             <input type="file" id="importFile" style="display:none" accept=".json"/>
             <button type="button" id="importBtn" class="btn btn-outline-danger me-2">Import</button>
-            <button type="button" id="importAppendBtn" class="btn btn-outline-warning">Import & Append</button>
+            <button type="button" id="importAppendBtn" class="btn btn-outline-warning me-2">Import & Append</button>
+            <button type="button" id="rewardBtn" class="btn btn-outline-primary me-2">Reward</button>
         </div>
     </form>
 </div>
@@ -105,6 +106,59 @@
             const importBtn = document.getElementById('importBtn');
             const importAppendBtn = document.getElementById('importAppendBtn');
             const importFile = document.getElementById('importFile');
+            const rewardBtn = document.getElementById("rewardBtn");
+
+            async function refreshSummary() {
+                try {
+                    const res = await fetch("/api/preferences/summary");
+                    if (!res.ok) throw new Error("Failed to fetch summaries");
+                    const summaries = await res.json();
+
+                    const tbody = document.querySelector("#summaryTable tbody");
+                    tbody.innerHTML = "";
+
+                    summaries.forEach(s => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                <td>${s.standName}</td>
+                <td>${s.availableSeats}</td>
+                <td>${s.numberOfPreferredSeats}</td>
+                <td>$${s.discountPrice}</td>
+                <td>$${s.estimatedTotalEarnings}</td>`;
+                        tbody.appendChild(row);
+                    });
+                } catch (err) {
+                    console.error("Error refreshing summary:", err);
+                }
+            }
+            refreshSummary();
+
+
+            // ---- REWARD BUTTON ----
+            if (rewardBtn) {
+                rewardBtn.onclick = async () => {
+                    console.log("Reward button clicked.");
+
+                    try {
+                        const res = await fetch("/api/reward/run", {
+                            method: "POST"
+                        });
+
+                        // Parse JSON response instead of plain text
+                        const data = await res.json();
+
+                        if (data.success) {
+                            alert(data.message); // Show success message
+                            window.location.href = "/reward";  //redirect user to reward page
+                        } else {
+                            alert("Reward failed: " + (data.message || "Unknown error"));
+                        }
+                    } catch (err) {
+                        console.error("Reward process failed:", err);
+                        alert("Rewarding failed. Check console.");
+                    }
+                };
+            }
 
             // ---- ADD BUTTON ----
             if (addBtn) {
@@ -140,6 +194,7 @@
                         });
                         const text = await res.text();
                         alert(text);
+                        await refreshSummary();
                         console.log("Server response:", text);
                     } catch (err) {
                         alert('Error sending request: ' + err);

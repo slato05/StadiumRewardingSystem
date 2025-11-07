@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/bootstrap}">
+<head>
+  <meta charset="UTF-8">
+  <title>Stadium Rewards</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+  <h3 class="text-center mb-4 fw-bold text-success">Rewarding Process</h3>
+
+  <div class="text-center mb-4">
+    <button id="rewardBtn" class="btn btn-lg btn-outline-primary">Run Rewarding Process</button>
+  </div>
+
+  <h4 class="mb-3 text-primary">Reward Results</h4>
+
+  <input id="searchInput" type="text" class="form-control mb-3"
+         placeholder="Filter results...">
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped text-center align-middle">
+      <thead class="table-dark">
+      <tr>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Preferred Stand</th>
+        <th>Seat</th>
+      </tr>
+      </thead>
+      <tbody id="rewardTableBody">
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div layout:fragment="scripts">
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const rewardBtn = document.getElementById("rewardBtn");
+      const searchInput = document.getElementById("searchInput");
+
+      rewardBtn.onclick = async () => {
+        const res = await fetch("/api/reward/run", { method: "POST" });
+        alert(await res.text());
+        loadRewards();
+      };
+
+      async function loadRewards() {
+        const res = await fetch("/api/reward/results");
+        const data = await res.json();
+        console.log("Reward JSON received:", data);
+        renderTable(data);
+        window.fullRewardData = data; // store globally for filtering
+      }
+
+      function renderTable(data) {
+        const body = document.getElementById("rewardTableBody");
+        body.innerHTML = "";
+
+        data.forEach(r => {
+          body.innerHTML += `
+            <tr>
+              <td>${r.firstName}</td>
+              <td>${r.lastName}</td>
+              <td>${r.email}</td>
+              <td>${r.phoneNumber}</td>
+              <td>${r.standId}</td>
+              <td>${r.seatId}</td>
+            </tr>`;
+        });
+      }
+
+      // ---- FILTERING ----
+      searchInput.addEventListener("input", () => {
+        const q = searchInput.value.toLowerCase();
+        const filtered = window.fullRewardData.filter(row =>
+                Object.values(row).some(v =>
+                        (v ?? "").toString().toLowerCase().includes(q)
+                )
+        );
+        renderTable(filtered);
+      });
+
+      loadRewards(); // initial table load
+    });
+  </script>
+</div>
+</body>
+</html>
+

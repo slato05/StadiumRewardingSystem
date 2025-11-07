@@ -12,17 +12,22 @@ import java.util.List;
 @Controller
 public class PreferenceViewController {
 
-    private final PreferenceSummaryService service;
+    private final PreferenceSummaryService summaryService;
 
     @Autowired
-    public PreferenceViewController(PreferenceSummaryService service) {
-        this.service = service;
+    public PreferenceViewController(PreferenceSummaryService summaryService) {
+        this.summaryService = summaryService;
     }
 
     @GetMapping("/preferences")
     public String showPreferenceSummary(Model model) {
-        List<PreferenceSummary> summaries = service.loadPreferenceSummary();
-        model.addAttribute("summaries", summaries);
-        return "preference";
+
+        // Load live data from JSON + DB
+        List<PreferenceSummary> summaries = summaryService.loadPreferenceSummary();
+
+        // Make available to Thymeleaf
+        model.addAttribute("summaries", summaryService.loadPreferenceSummary());
+
+        return "preference";   // Loads preferences.html
     }
 }

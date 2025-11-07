@@ -67,7 +67,7 @@ public class PreferenceService {
             return map;
         }).collect(Collectors.toList());
 
-        // Check for duplicates *within* the JSON file
+        // Check for duplicates within the JSON file
         Map<String, Long> counts = normalized.stream()
                 .collect(Collectors.groupingBy(
                         d -> (d.get("firstName") + "|" + d.get("lastName")).toLowerCase(),
@@ -83,7 +83,7 @@ public class PreferenceService {
             throw new IllegalArgumentException("Duplicate names found in import file: " + duplicatesInFile);
         }
 
-        // Check for duplicates *against database* using mapper.findDuplicateFan()
+        // Check for duplicates against database using mapper.findDuplicateFan()
         List<String> duplicatesInDB = new ArrayList<>();
         for (Map<String, String> record : normalized) {
             String firstName = record.get("firstName");

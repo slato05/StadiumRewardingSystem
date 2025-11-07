@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.itccloud.mapper.RewardMapper">
+
+    <insert id="insertReward" parameterType="com.itccloud.model.Reward">
+        INSERT INTO StadiumRewardSystem.Reward (fan_id, seat_id)
+        VALUES (#{fanId}, #{seatId});
+    </insert>
+
+    <delete id="clearRewards">
+        DELETE FROM StadiumRewardSystem.Reward;
+    </delete>
+
+    <select id="findRewardResults" resultType="com.itccloud.model.RewardResult">
+        SELECT
+            f.fan_id AS fanId,
+            f.first_name AS firstName,
+            f.last_name AS lastName,
+            f.email AS email,
+            f.phone_number AS phoneNumber,
+            f.occupation AS occupation,
+            p.stand_id AS standId,
+            r.seat_id AS seatId
+        FROM StadiumRewardSystem.Reward r
+                 JOIN StadiumRewardSystem.Fan f ON r.fan_id = f.fan_id
+                 JOIN StadiumRewardSystem.Preference p ON p.fan_id = f.fan_id
+        ORDER BY p.stand_id ASC;
+    </select>
+
+
+</mapper>
+
