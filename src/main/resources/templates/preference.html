@@ -108,6 +108,7 @@
             const importFile = document.getElementById('importFile');
             const rewardBtn = document.getElementById("rewardBtn");
 
+            // ---- REFRESH PREFERENCE SUMMARY ----
             async function refreshSummary() {
                 try {
                     const res = await fetch("/api/preferences/summary");

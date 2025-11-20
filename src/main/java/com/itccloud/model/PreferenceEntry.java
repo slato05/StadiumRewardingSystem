@@ -12,9 +12,7 @@ public class PreferenceEntry {
     private String standId;
     private Timestamp reservationTime;
 
-    public int getFanId() {
-        return fanId;
-    }
+    public int getFanId() { return fanId; }
 
     public void setFanId(int fanId) {
         this.fanId = fanId;
