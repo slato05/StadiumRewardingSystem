@@ -7,27 +7,27 @@
 
     <select id="countPreferencesByStand" resultType="int">
         SELECT COUNT(*)
-        FROM StadiumRewardSystem.preference
+        FROM preference
         WHERE stand_id = #{standId}
     </select>
 
 
     <insert id="insertFan" useGeneratedKeys="true" keyProperty="fanId">
-        INSERT INTO StadiumRewardSystem.Fan
+        INSERT INTO Fan
             (first_name, last_name, email, phone_number, occupation)
         VALUES
             (#{firstName}, #{lastName}, #{email}, #{phoneNumber}, #{occupation})
     </insert>
 
     <insert id="insertPreference">
-        INSERT INTO StadiumRewardSystem.Preference
+        INSERT INTO Preference
             (fan_id, stand_id, reservation_time)
         VALUES
             (#{fanId}, #{standId}, #{reservationTime})
     </insert>
 
     <select id="findDuplicateFan" resultType="int">
-        SELECT COUNT(*) FROM StadiumRewardSystem.Fan
+        SELECT COUNT(*) FROM Fan
         WHERE LOWER(first_name) = LOWER(#{firstName})
           AND LOWER(last_name) = LOWER(#{lastName})
     </select>
@@ -42,14 +42,14 @@
             f.occupation AS occupation,
             p.stand_id AS standId,
             p.reservation_time AS reservationTime
-        FROM StadiumRewardSystem.Fan f
-                 JOIN StadiumRewardSystem.Preference p ON f.fan_id = p.fan_id
+        FROM Fan f
+                 JOIN Preference p ON f.fan_id = p.fan_id
         ORDER BY p.reservation_time;
     </select>
 
     <delete id="clearPreferences">
-        DELETE FROM StadiumRewardSystem.Preference;
-        DELETE FROM StadiumRewardSystem.Fan;
+        DELETE FROM Preference;
+        DELETE FROM Fan;
     </delete>
 
 </mapper>
